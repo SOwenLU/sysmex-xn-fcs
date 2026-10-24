@@ -1,0 +1,464 @@
+{
+  "generated_on": "2026-10-22",
+  "source": "Kaku N et al. PLOS ONE 2018; doi:10.1371/journal.pone.0190886, supplementary files S1-S4 (Sysmex XN-1000, XN-BF mode, WDF channel)",
+  "n_files": 4,
+  "file_structure": {
+    "fcs_version": "FCS3.0",
+    "header_spacer_4_spaces": true,
+    "header_text_begin_offsets": 58,
+    "header_other_segments": 0,
+    "text_delimiter": "/",
+    "text_delimiter_ascii_code": 47,
+    "text_ends_with_delimiter": true,
+    "datasets_per_file": 1,
+    "analysis_segment_present": false,
+    "supplemental_text_present": false,
+    "trailing_crc_like_bytes": false,
+    "header_and_keyword_data_offsets_agree": true
+  },
+  "encoding": {
+    "DATATYPE": "I",
+    "BYTEORD": "1,2,3,4",
+    "MODE": "L",
+    "bytes_per_event": 4
+  },
+  "parameters_identical_across_files": true,
+  "parameters": [
+    {
+      "index": 1,
+      "PnN": "SSC",
+      "PnS": "Side Scatter Signal",
+      "PnB": 8,
+      "PnR": 256,
+      "PnE": "0,0",
+      "PnG": null,
+      "role": "SSC",
+      "other_Pn_keywords": null,
+      "observed_min": 0,
+      "observed_max": 255,
+      "all_integer": true,
+      "per_file": {
+        "S1_ds1": {
+          "median": 146,
+          "p01": 48,
+          "p99": 255,
+          "sd": 51.3759607118224
+        },
+        "S2_ds1": {
+          "median": 103,
+          "p01": 36.01,
+          "p99": 240,
+          "sd": 43.8957869175641
+        },
+        "S3_ds1": {
+          "median": 147,
+          "p01": 55,
+          "p99": 223,
+          "sd": 31.9341818335004
+        },
+        "S4_ds1": {
+          "median": 108,
+          "p01": 29.14,
+          "p99": 202,
+          "sd": 42.2695231421358
+        }
+      }
+    },
+    {
+      "index": 2,
+      "PnN": "SFL",
+      "PnS": "Side Fluorescence Signal",
+      "PnB": 8,
+      "PnR": 256,
+      "PnE": "0,0",
+      "PnG": null,
+      "role": "SFL",
+      "other_Pn_keywords": null,
+      "observed_min": 0,
+      "observed_max": 255,
+      "all_integer": true,
+      "per_file": {
+        "S1_ds1": {
+          "median": 160,
+          "p01": 1,
+          "p99": 255,
+          "sd": 85.787626752786
+        },
+        "S2_ds1": {
+          "median": 69,
+          "p01": 0,
+          "p99": 255,
+          "sd": 70.8397132486388
+        },
+        "S3_ds1": {
+          "median": 141,
+          "p01": 0,
+          "p99": 255,
+          "sd": 61.0774783318372
+        },
+        "S4_ds1": {
+          "median": 41,
+          "p01": 0,
+          "p99": 255,
+          "sd": 66.3706494581105
+        }
+      }
+    },
+    {
+      "index": 3,
+      "PnN": "FSC",
+      "PnS": "Forward Scatter Signal",
+      "PnB": 8,
+      "PnR": 256,
+      "PnE": "0,0",
+      "PnG": null,
+      "role": "FSC",
+      "other_Pn_keywords": null,
+      "observed_min": 10,
+      "observed_max": 255,
+      "all_integer": true,
+      "per_file": {
+        "S1_ds1": {
+          "median": 57,
+          "p01": 12,
+          "p99": 255,
+          "sd": 83.6552757412461
+        },
+        "S2_ds1": {
+          "median": 52,
+          "p01": 11,
+          "p99": 255,
+          "sd": 50.5325298610603
+        },
+        "S3_ds1": {
+          "median": 77,
+          "p01": 14,
+          "p99": 255,
+          "sd": 39.2590840513139
+        },
+        "S4_ds1": {
+          "median": 46,
+          "p01": 11,
+          "p99": 244.86,
+          "sd": 45.8448872024833
+        }
+      }
+    },
+    {
+      "index": 4,
+      "PnN": "FSCW",
+      "PnS": "Forward Scatter Pulse Width Signal",
+      "PnB": 8,
+      "PnR": 256,
+      "PnE": "0,0",
+      "PnG": null,
+      "role": "FSCW",
+      "other_Pn_keywords": null,
+      "observed_min": 0,
+      "observed_max": 255,
+      "all_integer": true,
+      "per_file": {
+        "S1_ds1": {
+          "median": 23,
+          "p01": 6,
+          "p99": 162,
+          "sd": 30.6306139385239
+        },
+        "S2_ds1": {
+          "median": 19,
+          "p01": 4,
+          "p99": 88.9899999999998,
+          "sd": 15.3488398079966
+        },
+        "S3_ds1": {
+          "median": 24,
+          "p01": 6.12,
+          "p99": 47,
+          "sd": 7.47575367106089
+        },
+        "S4_ds1": {
+          "median": 18,
+          "p01": 2,
+          "p99": 53.8599999999997,
+          "sd": 11.521491153938
+        }
+      }
+    }
+  ],
+  "keywords": {
+    "spec_required": [
+      {
+        "keyword": "$BEGINANALYSIS",
+        "observed": true,
+        "example_value": "0000000000"
+      },
+      {
+        "keyword": "$BEGINDATA",
+        "observed": true,
+        "example_value": "0000000731"
+      },
+      {
+        "keyword": "$BEGINSTEXT",
+        "observed": true,
+        "example_value": "0000000000"
+      },
+      {
+        "keyword": "$BYTEORD",
+        "observed": true,
+        "example_value": "1,2,3,4"
+      },
+      {
+        "keyword": "$DATATYPE",
+        "observed": true,
+        "example_value": "I"
+      },
+      {
+        "keyword": "$ENDANALYSIS",
+        "observed": true,
+        "example_value": "0000000000"
+      },
+      {
+        "keyword": "$ENDDATA",
+        "observed": true,
+        "example_value": "0000181302"
+      },
+      {
+        "keyword": "$ENDSTEXT",
+        "observed": true,
+        "example_value": "0000000000"
+      },
+      {
+        "keyword": "$MODE",
+        "observed": true,
+        "example_value": "L"
+      },
+      {
+        "keyword": "$NEXTDATA",
+        "observed": true,
+        "example_value": "0000000000"
+      },
+      {
+        "keyword": "$PAR",
+        "observed": true,
+        "example_value": "4"
+      },
+      {
+        "keyword": "$TOT",
+        "observed": true,
+        "example_value": "45143"
+      },
+      {
+        "keyword": "$PnB",
+        "observed": true,
+        "example_value": null
+      },
+      {
+        "keyword": "$PnE",
+        "observed": true,
+        "example_value": null
+      },
+      {
+        "keyword": "$PnN",
+        "observed": true,
+        "example_value": null
+      },
+      {
+        "keyword": "$PnR",
+        "observed": true,
+        "example_value": null
+      }
+    ],
+    "present_in_all_files": [
+      {
+        "keyword": "$BEGINANALYSIS",
+        "example_value": "0000000000",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$BEGINDATA",
+        "example_value": "0000000731",
+        "constant_across_files": false,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$BEGINSTEXT",
+        "example_value": "0000000000",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$BYTEORD",
+        "example_value": "1,2,3,4",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$CELLS",
+        "example_value": "[REDACTED; shape=XX]",
+        "constant_across_files": true,
+        "redacted": true,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$COM",
+        "example_value": "[REDACTED; shape=XXXXXX]",
+        "constant_across_files": true,
+        "redacted": true,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$CYT",
+        "example_value": "XN-20",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$CYTSN",
+        "example_value": "11569",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$DATATYPE",
+        "example_value": "I",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$DATE",
+        "example_value": "[REDACTED; shape=99-99-9999]",
+        "constant_across_files": false,
+        "redacted": true,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$ENDANALYSIS",
+        "example_value": "0000000000",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$ENDDATA",
+        "example_value": "0000181302",
+        "constant_across_files": false,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$ENDSTEXT",
+        "example_value": "0000000000",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$ETIM",
+        "example_value": "[REDACTED; shape=99:99:99]",
+        "constant_across_files": true,
+        "redacted": true,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$FIL",
+        "example_value": "[REDACTED; shape=[XX-99^99999][99-99_9][99999999_999999][                 XX-99].999]",
+        "constant_across_files": false,
+        "redacted": true,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$MODE",
+        "example_value": "L",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$NEXTDATA",
+        "example_value": "0000000000",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$ORIGINALITY",
+        "example_value": "Original",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$PAR",
+        "example_value": "4",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$SMNO",
+        "example_value": "[REDACTED; shape=XX-99]",
+        "constant_across_files": false,
+        "redacted": true,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$SYS",
+        "example_value": "Windows 7",
+        "constant_across_files": true,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      },
+      {
+        "keyword": "$TOT",
+        "example_value": "45143",
+        "constant_across_files": false,
+        "redacted": false,
+        "sysmex_specific_candidate": false,
+        "segment": "TEXT"
+      }
+    ],
+    "optional_observed": [],
+    "parameter_keywords_observed": ["$PnB", "$PnE", "$PnN", "$PnR", "$PnS"]
+  },
+  "event_count": {
+    "min": 4313,
+    "max": 45143,
+    "per_file": {
+      "S1_ds1": 45143,
+      "S2_ds1": 4602,
+      "S3_ds1": 4313,
+      "S4_ds1": 4915
+    },
+    "TOT_equals_rows": true
+  },
+  "not_inferable_from_these_files": ["Whole-blood (XN WB mode) event counts and WDF cluster positions", "Other XN channels: WNR, WPC, RET, PLT-F, PLT-I/RBC (impedance)", "Normal or non-malignant body-fluid scattergrams (all four are malignant pleural effusions)", "Day-to-day / instrument-to-instrument calibration differences", "Whether a different export route (e.g. other IPU/service software version) changes keywords or encoding"]
+}

@@ -1,0 +1,5 @@
+"label","file","dataset","reader","flowcore_error","flowcore_warnings","rows","cols"
+"S1","synthetic.s001.fcs",1,"flowCore","","",45143,4
+"S2","synthetic.s002.fcs",1,"flowCore","","",4602,4
+"S3","synthetic.s003.fcs",1,"flowCore","","",4313,4
+"S4","synthetic.s004.fcs",1,"flowCore","","",4915,4

@@ -1,0 +1,6 @@
+"label","file","size_bytes","sha256","magic","is_fcs","label_source","paper_sample","diagnosis","rule1","rule2"
+"S1","pone.0190886.s001.fcs",181303,"740c64e572b875224a064de846fdbec3b78a40747b9b05bcbd73623ad059029c","FCS3.0",TRUE,"filename",4,"adenocarcinoma","+","+"
+"S2","pone.0190886.s002.fcs",19137,"b83d8e1a030624f82bdd90baac8bf8bdb7bd6b151de7e78230a83f4fab117076","FCS3.0",TRUE,"filename",13,"adenocarcinoma","+","-"
+"S3","pone.0190886.s003.fcs",17985,"a88d7627526a98e0240048bbd093ee9115db8e8e05a897a90fb3229d479ccdcf","FCS3.0",TRUE,"filename",16,"mesothelioma","-","+"
+"S4","pone.0190886.s004.fcs",20388,"936d99f92b39c83e24859c97184742622ea277a5ec98e2adffcbf0f790403bc2","FCS3.0",TRUE,"filename",18,"adenocarcinoma","-","-"
+,"Brief.txt",6350,"bb3cc60bd6e61456b4b3933320301ceb6aa0cad97e8bb71f3b1793e184e67ebe","# Task",FALSE,,,,,

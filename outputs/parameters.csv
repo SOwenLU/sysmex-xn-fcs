@@ -1,0 +1,17 @@
+"label","file","dataset","index","PnN","PnS","PnB","PnR","PnE","PnG","PnD","PnV","other_Pn_keywords","role","flowcore_name","flowcore_range","flowcore_maxRange"
+"S1","pone.0190886.s001.fcs",1,1,"SSC","Side Scatter Signal","8","256","0,0",,,,"","SSC","SSC",256,255
+"S1","pone.0190886.s001.fcs",1,2,"SFL","Side Fluorescence Signal","8","256","0,0",,,,"","SFL","SFL",256,255
+"S1","pone.0190886.s001.fcs",1,3,"FSC","Forward Scatter Signal","8","256","0,0",,,,"","FSC","FSC",256,255
+"S1","pone.0190886.s001.fcs",1,4,"FSCW","Forward Scatter Pulse Width Signal","8","256","0,0",,,,"","FSCW","FSCW",256,255
+"S2","pone.0190886.s002.fcs",1,1,"SSC","Side Scatter Signal","8","256","0,0",,,,"","SSC","SSC",256,255
+"S2","pone.0190886.s002.fcs",1,2,"SFL","Side Fluorescence Signal","8","256","0,0",,,,"","SFL","SFL",256,255
+"S2","pone.0190886.s002.fcs",1,3,"FSC","Forward Scatter Signal","8","256","0,0",,,,"","FSC","FSC",256,255
+"S2","pone.0190886.s002.fcs",1,4,"FSCW","Forward Scatter Pulse Width Signal","8","256","0,0",,,,"","FSCW","FSCW",256,255
+"S3","pone.0190886.s003.fcs",1,1,"SSC","Side Scatter Signal","8","256","0,0",,,,"","SSC","SSC",256,255
+"S3","pone.0190886.s003.fcs",1,2,"SFL","Side Fluorescence Signal","8","256","0,0",,,,"","SFL","SFL",256,255
+"S3","pone.0190886.s003.fcs",1,3,"FSC","Forward Scatter Signal","8","256","0,0",,,,"","FSC","FSC",256,255
+"S3","pone.0190886.s003.fcs",1,4,"FSCW","Forward Scatter Pulse Width Signal","8","256","0,0",,,,"","FSCW","FSCW",256,255
+"S4","pone.0190886.s004.fcs",1,1,"SSC","Side Scatter Signal","8","256","0,0",,,,"","SSC","SSC",256,255
+"S4","pone.0190886.s004.fcs",1,2,"SFL","Side Fluorescence Signal","8","256","0,0",,,,"","SFL","SFL",256,255
+"S4","pone.0190886.s004.fcs",1,3,"FSC","Forward Scatter Signal","8","256","0,0",,,,"","FSC","FSC",256,255
+"S4","pone.0190886.s004.fcs",1,4,"FSCW","Forward Scatter Pulse Width Signal","8","256","0,0",,,,"","FSCW","FSCW",256,255

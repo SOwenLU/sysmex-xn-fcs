@@ -1,0 +1,51 @@
+input : /home/srhys/projects/hackathon/outputs/synthetic_3sig/fcs (read-only)
+output: /home/srhys/projects/hackathon/outputs/synthetic_3sig/pipeline 
+
+== 01 inspect header ==
+   4 FCS file(s), 0 skipped
+  wrote inputs_manifest.csv ( 4 rows )
+  wrote header_structure.csv ( 4 rows )
+ label dataset version DATATYPE BYTEORD MODE PAR   TOT   NEXTDATA
+    S1       1  FCS3.0        I 1,2,3,4    L   4 45143 0000000000
+    S2       1  FCS3.0        I 1,2,3,4    L   4  4602 0000000000
+    S3       1  FCS3.0        I 1,2,3,4    L   4  4313 0000000000
+    S4       1  FCS3.0        I 1,2,3,4    L   4  4915 0000000000
+ analysis_segment_present
+                    FALSE
+                    FALSE
+                    FALSE
+                    FALSE
+
+== 02 read and summarise ==
+   S1 dataset 1 : 45143 events x 4 parameters via flowCore 
+   S2 dataset 1 : 4602 events x 4 parameters via flowCore 
+   S3 dataset 1 : 4313 events x 4 parameters via flowCore 
+   S4 dataset 1 : 4915 events x 4 parameters via flowCore 
+  wrote keywords_all.csv ( 180 rows )
+  wrote parameters.csv ( 16 rows )
+  wrote event_summary.csv ( 16 rows )
+  wrote reader_status.csv ( 4 rows )
+  redacted keyword values: 28 
+  flowCore vs raw-parser event checks passing: 16 of 16 
+
+== 03 plots ==
+  wrote figures/S1_pairs.png
+  wrote figures/S1_key.png
+  wrote figures/S1_hist.png
+  wrote figures/S2_pairs.png
+  wrote figures/S2_key.png
+  wrote figures/S2_hist.png
+  wrote figures/S3_pairs.png
+  wrote figures/S3_key.png
+  wrote figures/S3_hist.png
+  wrote figures/S4_pairs.png
+  wrote figures/S4_key.png
+  wrote figures/S4_hist.png
+  wrote figures/combined_key_4x3.png
+
+== 04 schema and report ==
+  wrote schema.json
+  wrote report.md
+  wrote sessionInfo.txt
+
+Done. Report: /home/srhys/projects/hackathon/outputs/synthetic_3sig/pipeline/report.md 

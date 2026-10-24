@@ -1,0 +1,5 @@
+"label","file","dataset","reader","flowcore_error","flowcore_warnings","rows","cols"
+"S1","pone.0190886.s001.fcs",1,"flowCore","","",45143,4
+"S2","pone.0190886.s002.fcs",1,"flowCore","","",4602,4
+"S3","pone.0190886.s003.fcs",1,"flowCore","","",4313,4
+"S4","pone.0190886.s004.fcs",1,"flowCore","","",4915,4
