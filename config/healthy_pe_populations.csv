@@ -1,10 +1,10 @@
-population,sysmex_category,SSC_centre,SSC_sd,SFL_centre,SFL_sd,FSC_centre,FSC_sd,FSCW_centre,FSCW_sd,pct_cells,pct_cells_low,pct_cells_high,position_source,proportion_source,status
-lymphocyte,MN,71,9,50,12,47,9,17,2,50,30,65,S1+S2 lymphocyte gate (S4 SFL runs ~10 lower),literature benign PE,positions MEASURED; proportion ASSUMED
-monocyte,MN,127,13,110,30,58,15,22,5,15,8,25,S2+S4 monocyte gate,literature benign PE,positions MEASURED (gate mixes in macrophages); proportion ASSUMED
-macrophage,MN,167,8,142,34,165,58,38,6,13,5,25,S4 high-SSC band below HF-BF cutoff,literature benign PE,positions MEASURED; proportion ASSUMED
-neutrophil,PMN,155,10,37,7,86,20,22,3,12,3,25,S1+S2+S4 neutrophil gate,literature benign PE,positions MEASURED; proportion ASSUMED
-eosinophil,PMN,180,10,45,8,90,20,22,3,3,0,8,not separable in S1-S4; placed above neutrophils on SSC,literature benign PE,positions ASSUMED; proportion ASSUMED
-hfbf_macrophage,HF-BF,167,18,255,25,70,46,29,9,4,1,8,S2+S4 HF-BF gate (SFL >= 214; SFL centre is latent then clipped at 255),Table 1 benign PE HF-BF share split 2:1,positions MEASURED (shared with mesothelial); split ASSUMED
-mesothelial,HF-BF,167,18,255,25,70,46,29,9,2,0.5,4,S2+S4 HF-BF gate (same region as hfbf_macrophage),Table 1 benign PE HF-BF share split 2:1,positions MEASURED (shared); split ASSUMED
-aggregate,HF-BF,200,30,245,20,255,0,65,20,1,0,2,S2+S3+S4 aggregate gate (FSC fixed at 255),Table 1 specificity (benign Rule 1 hits) + S4,positions MEASURED; proportion ASSUMED
-debris,none,65,25,3,4,18,14,9,5,NA,NA,NA,S1+S2+S3 debris gate (SFL < 16; zero-inflated),pct of ALL events: 8 (3-15),positions MEASURED; proportion ASSUMED
+population,sysmex_category,SSC_centre,SSC_sd,SFL_centre,SFL_sd,FSC_centre,FSC_sd,FSCW_centre,FSCW_sd,r_SSC_SFL,r_SSC_FSC,r_SSC_FSCW,r_SFL_FSC,r_SFL_FSCW,r_FSC_FSCW,pct_cells,pct_cells_low,pct_cells_high,position_source,proportion_source,status
+lymphocyte,MN,72,9,52,12,48,8,17,1.5,0.35,0.03,0.07,0.37,0.22,0.66,40,20,60,S1+S2 lymphocyte gate (S4 SFL runs ~10 lower),Noppen 2000 (23%) and Ferreiro 2017 (44% of HF effusions lymph-predominant),positions MEASURED; proportion ASSUMED from literature
+monocyte,MN,125,14,115,38,53,12,20,4,0.50,-0.03,0.29,-0.12,-0.05,0.57,13,5,20,S2+S4 band gate with FSC < 80,literature: macrophage-lineage dominant in normal fluid,positions MEASURED; proportion ASSUMED
+macrophage,MN,148,16,120,39,122,42,34,4.5,0.55,0.64,0.58,0.67,0.64,0.69,30,15,50,S4 band gate with FSC >= 80,Noppen 2000 (75% macrophages); most counted as MN since HF-BF is only ~6%,positions MEASURED; proportion ASSUMED from literature
+neutrophil,PMN,154,9.5,39,5,88,16,22,2,0.38,0.40,0.39,0.34,0.20,0.65,8,1,25,S2+S3 neutrophil gate,Noppen 2000 (~0%); benign effusions vary,positions MEASURED; proportion ASSUMED
+eosinophil,PMN,180,12,40,6,93,17,23,2,0.38,0.40,0.39,0.34,0.20,0.65,2,0,10,S4 high-SSC end of neutrophil gate (SSC ~179),Noppen 2000 (~0%); >=10% = eosinophilic effusion,positions ASSUMED; proportion ASSUMED
+hfbf_macrophage,HF-BF,167,18,262,20,80,35,29,7.5,0.49,0.70,0.73,0.16,0.28,0.82,4,1,8,S4 HF-BF gate (SFL >= 214; SFL centre latent then clipped at 255),Table 1 benign PE HF-BF share 5.9% split 2:1,positions MEASURED (shared with mesothelial); split ASSUMED
+mesothelial,HF-BF,167,18,262,20,80,35,29,7.5,0.49,0.70,0.73,0.16,0.28,0.82,2,0.5,5,S4 HF-BF gate (same region as hfbf_macrophage),Table 1 benign PE HF-BF share; Noppen 2000 (1%),positions MEASURED (shared); split ASSUMED
+aggregate,HF-BF,205,28,262,20,255,0,65,25,0.50,0,0.60,0,0.30,0,1,0,2,S2+S3+S4 aggregate gate (FSC fixed at 255),Table 1 specificity (12% of benign samples flagged),positions MEASURED; proportion ASSUMED
+debris,none,66,30,3,5.5,18,12,9,5.5,0.18,0.50,0.55,0,0.12,0.88,NA,NA,NA,S1+S2+S3+S4 debris gate (SFL < 16; zero-inflated),pct of ALL events: 8 (3-15),positions MEASURED; proportion ASSUMED

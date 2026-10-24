@@ -1,7 +1,7 @@
 # Healthy pleural-effusion reference populations: how they were derived
 
 Log of how the population positions and proportions in `config/healthy_pe_populations.csv` were
-estimated for the synthetic healthy-control generator. Started 2026-10-24.
+estimated for the synthetic healthy-control generator. Started 2026-10-24; revision 2 (literature check, correlations, size-split macrophage gate) the same day.
 
 **Every number is tagged MEASURED** (taken from the public S1–S4 events or the paper's Table 1)
 **or ASSUMED** (a judgement or a literature value still to be checked). Assumed values are the ones to
@@ -76,70 +76,77 @@ with SFL ≥ t matches that share.
 - **Consequence:** the diagonal band at SFL ~80–200 (monocytes and most macrophages) is **counted as
   WBC (MN) by the analyser, not as HF-BF**. Only cells near SFL saturation count as HF-BF.
 
-## 4. Gating and per-population positions (MEASURED)
+## 4. Gating, positions and shapes (MEASURED)
 
-Same script → `outputs/reference_populations/gate_summary.csv`. The gates are rectangles read off the
-step 2 figure and are applied in order; an event takes the first gate it matches.
+Same script → `outputs/reference_populations/gate_summary.csv` (shares and percentiles) and
+`gate_shape.csv` (centre, robust SD, pairwise correlations). The gates are rectangles applied in
+order; an event takes the first gate it matches.
 
 | Order | Gate | Rule |
 |---|---|---|
 | 1 | debris | SFL < 16 (same rule as `R/wdf_populations.R`) |
 | 2 | aggregate | FSC = 255 or FSCW ≥ 60 |
-| 3 | HF-BF band | SFL ≥ 214 (from step 3) |
+| 3 | HF-BF | SFL ≥ 214 (from step 3) |
 | 4 | lymphocyte | SSC < 95 and SFL < 80 |
-| 5 | neutrophil | SSC ≥ 140 and SFL < 50 |
-| 6 | monocyte (+ macrophage) | 80 ≤ SSC < 160 and SFL ≥ 50 |
+| 5 | neutrophil | SSC ≥ 140, SFL < 50 and FSC ≥ 60 (FSC keeps out the S4 small cluster) |
+| 6 | monocyte | SSC ≥ 80, SFL ≥ 50 and FSC < 80 |
+| 7 | macrophage | SSC ≥ 80, SFL ≥ 50 and FSC ≥ 80 |
 
-Medians per gate (P10–P90 in the CSV):
+**Revision 2 (2026-10-24).** The first version used a monocyte gate of 80 ≤ SSC < 160 and a separate
+macrophage band at SSC ≥ 160. That clipped the macrophage SSC SD to 8, and the synthetic test showed
+a vertical stripe. The SFL 50–214 band is now split **by size (FSC 80)**, because on SFL vs FSC the
+monocytes form a narrow column at FSC ~50 and the macrophages a broad cloud at FSC 80–250.
+
+- **Spread:** SD = (P84 − P16) / 2. This equals the SD for a normal distribution and resists outliers.
+- **Correlation:** Spearman's ρ converted to Pearson, r = 2 sin(πρ/6).
+
+Per-gate medians:
 
 | Gate | File | SSC | SFL | FSC | FSCW | % of cells |
 |---|---|---|---|---|---|---|
 | lymphocyte | S1 / S2 / S4 | 73 / 71 / 69 | 52 / 52 / 41 | 49 / 47 / 44 | 17 / 17 / 16 | 22 / 38 / 26 |
-| neutrophil | S1 / S2 / S4 | 155 / 155 / 178 | 36 / 38 / 34 | 89 / 82 / 89 | 22 / 22 / 23 | 1.8 / 3.7 / 6.2 |
-| monocyte (+ macrophage) | S1 / S2 / S4 | 139 / 124 / 129 | 148 / 107 / 118 | 51 / 57 / 59 | 22 / 22 / 23 | 31 / 38 / 47 |
-| HF-BF band | S1 / S2 / S4 | 165 / 170 / 167 | 255 / 255 / 255 | 66 / 111 / 70 | 29 / 30 / 29 | 18 / 7.5 / 5.1 |
+| neutrophil | S1 / S2 / S3 / S4 | 158 / 156 / 152 / 179 | 36 / 39 / 40 / 34 | 91 / 85 / 92 / 93 | 22 | 1.6 / 3.3 / 2.7 / 5.4 |
+| monocyte | S1 / S2 / S4 | 139 / 124 / 125 | 156 / 111 / 119 | 48 / 55 / 52 | 21 / 21 / 20 | 26 / 33 / 33 |
+| macrophage | S1 / S2 / S4 | 154 / 136 / 148 | 127 / 98 / 120 | 137 / 97 / 122 | 35 / 30 / 34 | 9.9 / 7.2 / 19.3 |
+| HF-BF | S1 / S2 / S4 | 165 / 170 / 167 | 255 | 66 / 111 / 70 | 29 / 30 / 29 | 18 / 7.5 / 5.1 |
 | aggregate | S1 / S2 / S4 | 212 / 217 / 190 | 255 / 255 / 237 | 255 | 77 / 70 / 62 | 19 / 4.5 / 1.8 |
 | debris | S1 / S2 / S4 | 60 / 68 / 69 | 3 / 5 / 3 | 17 / 18 / 19 | 9 | 3.2 / 10.7 / 33.2 (% of all events) |
 
+**The correlations are strong and consistent across files.** FSC–FSCW is 0.5–0.9 in every population.
+In the diagonal band, SSC–SFL is 0.4–0.7. In macrophages, SFL–FSC is about 0.67. Leaving these out is
+what made the first synthetic test look like separate blobs.
+
 **Checks on events that looked odd in S4:**
 
-- **S4 runs about 10 SFL lower** than S1 and S2 (lymphocyte SFL 41 vs 52) and its lymphocytes are
-  wider (MAD 16 vs 10). This suggests weaker staining or run-to-run variation. Positions are anchored
-  on S1 and S2 for lymphocytes, and the offset is kept as evidence for a batch-shift term in the
-  noise model.
-- **S4's 33% debris is overstated.** 21% of its SFL < 16 events have FSC ≥ 35 and 28% have SFL 8–15,
-  so the gate is cutting into weakly stained cells. The healthy debris fraction is therefore not
-  taken from S4.
-- **S4 has a high-SSC band below the HF-BF cutoff** (SSC ≥ 160, SFL 80–214; n = 148): median SSC 167,
-  SFL 142, FSC 164, FSCW 38. These are large, structured, moderately fluorescent cells, which fits
-  **macrophages** that the analyser counts as MN. This is the macrophage row in the config.
-- **S4 has an unidentified low-FSC cluster** (SSC 99–135, SFL 16–50; n = 276): median SSC 113,
-  SFL 29, **FSC 40** (smaller than lymphocytes). It's too small to be intact neutrophils (FSC ~86).
-  Most likely degenerate cells or debris. **Left out of the baseline; needs review (see step 7).**
-- **S4's neutrophil gate centres at SSC 178, against 155 in S1 and S2.** S4 may contain eosinophils,
-  which sit at higher SSC. Eosinophils aren't separable in these files, so the eosinophil position is
-  **ASSUMED** at SSC 180 / SFL 45, just above the neutrophils.
+- **S4 runs about 10 SFL lower** than S1 and S2 (lymphocyte SFL 41 vs 52), and its lymphocytes are
+  wider. Lymphocyte positions are therefore anchored on S1 and S2. The offset is evidence for a
+  batch-shift term in the noise model.
+- **S4's 33% debris is overstated:** 21% of its SFL < 16 events have FSC ≥ 35, so the gate catches
+  weakly stained cells.
+- **S4 small low-SFL cluster** (SSC ~113, SFL ~29, FSC ~40): smaller than lymphocytes. Dropped
+  (step 9).
+- **S4's neutrophils centre at SSC 179, against 152–158 in S1–S3.** That may be eosinophils, so the
+  eosinophil position is placed there (ASSUMED).
 
 ## 5. Final positions (`config/healthy_pe_populations.csv`)
 
-The **centre** is the gate median; **SD ≈ (P90 − P10) / 2.56** (the P10–P90 width of a normal
-distribution). Centres above 255 (SFL in HF-BF and aggregates) are latent values clipped at 255,
-the same approach as `R/wdf_populations.R`.
+The config carries a centre and SD per signal plus the six pairwise correlations. Centres above 255
+(SFL in HF-BF and aggregates) are latent values, clipped at 255.
 
-| Population | Sysmex | SSC | SFL | FSC | FSCW | Position |
-|---|---|---|---|---|---|---|
-| lymphocyte | MN | 71 ± 9 | 50 ± 12 | 47 ± 9 | 17 ± 2 | MEASURED (S1+S2) |
-| monocyte | MN | 127 ± 13 | 110 ± 30 | 58 ± 15 | 22 ± 5 | MEASURED (S2+S4); gate also contains macrophages |
-| macrophage | MN | 167 ± 8 | 142 ± 34 | 165 ± 58 | 38 ± 6 | MEASURED (S4 high-SSC band) |
-| neutrophil | PMN | 155 ± 10 | 37 ± 7 | 86 ± 20 | 22 ± 3 | MEASURED (S1+S2+S4) |
-| eosinophil | PMN | 180 ± 10 | 45 ± 8 | 90 ± 20 | 22 ± 3 | **ASSUMED** |
-| HF-BF macrophage | HF-BF | 167 ± 18 | 255 ± 25 (latent) | 70 ± 46 | 29 ± 9 | MEASURED (S2+S4 HF-BF band) |
-| mesothelial | HF-BF | same region as HF-BF macrophage | | | | MEASURED region; not separable on WDF |
-| aggregate | HF-BF | 200 ± 30 | 245 ± 20 (latent) | 255 (fixed) | 65 ± 20 | MEASURED (S2+S3+S4) |
-| debris | – | 65 ± 25 | 3 (zero-inflated) | 18 ± 14 | 9 ± 5 | MEASURED (S1+S2+S3) |
+| Population | Sysmex | SSC | SFL | FSC | FSCW | Key correlations | Position from |
+|---|---|---|---|---|---|---|---|
+| lymphocyte | MN | 72 ± 9 | 52 ± 12 | 48 ± 8 | 17 ± 1.5 | FSC–FSCW 0.66 | MEASURED: S1 + S2 |
+| monocyte | MN | 125 ± 14 | 115 ± 38 | 53 ± 12 | 20 ± 4 | SSC–SFL 0.50 | MEASURED: S2 + S4 |
+| macrophage | MN | 148 ± 16 | 120 ± 39 | 122 ± 42 | 34 ± 4.5 | all 0.55–0.69 | MEASURED: S4 |
+| neutrophil | PMN | 154 ± 9.5 | 39 ± 5 | 88 ± 16 | 22 ± 2 | FSC–FSCW 0.65 | MEASURED: S2 + S3 |
+| eosinophil | PMN | 180 ± 12 | 40 ± 6 | 93 ± 17 | 23 ± 2 | as neutrophil | **ASSUMED** (S4 high-SSC end) |
+| HF-BF macrophage | HF-BF | 167 ± 18 | 262 ± 20 (latent) | 80 ± 35 | 29 ± 7.5 | FSC–FSCW 0.82 | MEASURED: S4 |
+| mesothelial | HF-BF | same as HF-BF macrophage | | | | | MEASURED region; not separable |
+| aggregate | HF-BF | 205 ± 28 | 262 ± 20 (latent) | 255 (fixed) | 65 ± 25 | SSC–FSCW 0.60 | MEASURED: S2–S4 |
+| debris | – | 66 ± 30 | 0–15 (half at 0) | 18 ± 12 | 9 ± 5.5 | FSC–FSCW 0.88 | MEASURED: S1–S4 |
 
 Overlay: `Rscript R/plot_reference_populations.R` → `outputs/reference_populations/populations_overlay.png`
-(centre ± 2 SD ellipses on S4 and S1).
+(centre ± 2 SD ellipses, tilted by the correlation, over S4 and S1).
 
 ## 6. Proportions
 
@@ -155,78 +162,79 @@ From the 46 non-malignant pleural effusions in Table 1:
 | Benign samples flagged by Rule 1 or 2 | 8 of 65 (12%) | specificity 87.7%; samples #28–35 |
 | Events per file | **≈ 12 × TNC** (10–17 across S1–S4) | events ÷ TNC: 12.6, 12.0, 10.1, 16.5 |
 
-→ A typical healthy file has **about 12,000 events** (TNC ~1000/µL). The range from the TNC spread
-is about 450 to 90,000 events.
+→ A typical healthy file has **about 12,000 events**.
 
-### 6b. Split within white cells (ASSUMED, literature to confirm)
+### 6b. Literature check (revision 2)
 
-The paper doesn't report the lymphocyte / neutrophil / monocyte split. The values below are a
-benign-effusion profile (lymphocyte-predominant, some macrophages, few neutrophils and eosinophils),
-with HF-BF fixed by 6a.
+| Source | Population | Finding |
+|---|---|---|
+| [Noppen et al. 2000, *Am J Respir Crit Care Med*](https://www.wikigenes.org/e/ref/e/10988124.html) (PMID 10988124) | pleural lavage, healthy non-smokers | macrophages **75%** (IQR 16), lymphocytes **23%** (IQR 18), mesothelial **1%** (IQR 2), neutrophils **0%** (IQR 1), eosinophils **0%**; about 1,716 cells/µL |
+| [Ferreiro et al. 2017, *Rev Clin Esp* 217:136–43](https://revclinesp.es/en-behavior-nucleated-cells-in-various-articulo-S2254887417300097) | 1,467 effusions, 354 heart failure | only **44%** of heart-failure effusions were lymphocyte-predominant; the leading causes of lymphocytic effusions were TB and cancer |
+| [Lymphocyte-predominant exudates review](https://shc.amegroups.org/article/view/7225/html) | review | lymphocytes > 50% = lymphocyte-predominant, which suggests a chronic process; neutrophils point to an acute one |
+| [Fleming et al. 2012, *Clin Chem Lab Med*](https://www.degruyterbrill.com/document/doi/10.1515/cclm-2011-0927/html) | XN-1000 BF mode vs microscopy | the XN counts more PMN than microscopy (y = 1.48x) |
+
+**What changed.** Revision 1 assumed a lymphocyte-predominant profile (50% lymphocytes, 13% macrophages).
+The literature points the other way. Normal fluid is mostly macrophages, and even heart-failure
+effusions are lymphocyte-predominant in fewer than half of cases. The defaults now sit between
+Noppen's normal fluid and a typical benign effusion. They also match S4 (the least malignant file)
+reasonably: 26% lymphocytes, 33% monocytes, 19% macrophages, 5% neutrophils.
+
+### 6c. Composition for synthetic files
 
 | Population | % of nucleated cells (default) | Range | Basis |
 |---|---|---|---|
-| lymphocyte | 50 | 30–65 | ASSUMED: benign effusions are commonly lymphocyte-predominant |
-| monocyte | 15 | 8–25 | ASSUMED |
-| macrophage (MN) | 13 | 5–25 | ASSUMED; S4 shows a clear macrophage band |
-| neutrophil | 12 | 3–25 | ASSUMED; above ~25–50% suggests parapneumonic/inflammatory |
-| eosinophil | 3 | 0–8 | ASSUMED; ≥ 10% defines an eosinophilic effusion |
-| HF-BF macrophage | 4 | 1–8 | Table 1 HF-BF share 6% (MEASURED), split 2:1 (ASSUMED) |
-| mesothelial | 2 | 0.5–4 | as above |
-| aggregate | 1 | 0–2 | ASSUMED; keeps the ~12% benign Rule 1 hit rate possible |
+| lymphocyte | 40 | 20–60 | between Noppen 23% and lymphocyte-predominant effusions |
+| monocyte | 13 | 5–20 | ASSUMED |
+| macrophage (MN) | 30 | 15–50 | Noppen 75% macrophages; most count as MN since HF-BF is only ~6% |
+| neutrophil | 8 | 1–25 | Noppen ~0%; benign effusions vary, and the XN over-counts PMN |
+| eosinophil | 2 | 0–10 | Noppen ~0%; ≥ 10% = eosinophilic effusion |
+| HF-BF macrophage | 4 | 1–8 | HF-BF total 6% (MEASURED, Table 1); 2:1 split ASSUMED |
+| mesothelial | 2 | 0.5–5 | Noppen 1%; as above |
+| aggregate | 1 | 0–2 | keeps the 12% benign Rule 1 hit rate possible |
 | **Total** | **100** | | |
-| debris | **8% of all events** | 3–15% | S1 3.2%, S2 10.7%, S3 3.7% (S4 excluded: overstated) |
+| debris | **8% of all events** | 3–15% | S1 3.2%, S2 10.7%, S3 3.7% (S4 excluded) |
 
-**Alternative "truly normal" profile (to verify):** Noppen et al. 2000 (*Am J Respir Crit Care Med*
-162:1023–6) used pleural lavage in healthy volunteers and reported roughly 75% macrophages,
-23% lymphocytes, ~1–2% mesothelial cells and ≤ 2% neutrophils and eosinophils. These figures are
-quoted from memory and must be checked against the paper before use. If that profile is preferred,
-move most of the lymphocyte share into monocyte/macrophage.
-
-## 7. Synthetic test (one file)
+## 7. Synthetic test
 
 `Rscript R/simulate_healthy_test.R` → `outputs/reference_populations/synthetic_test.png`.
-This draws 12,000 events (seed 1) from the config, with 8% debris, and plots them beside S4.
-The test is deliberately crude: each channel is drawn independently and there is no sample-to-sample
-variation.
+This draws one 12,000-event file (seed 1) from the config, one multivariate normal per population,
+and plots it beside S4. There is no sample-to-sample variation yet.
 
-**What matches S4:** the lymphocyte, neutrophil, monocyte and debris positions; the SFL = 255 HF-BF
-ceiling; a small FSC = 255 aggregate edge.
+**Revision 1** drew each channel independently and gave separate blobs, a vertical macrophage stripe
+and a wide FSC–FSCW column. **Revision 2** adds the correlations and the size-split macrophage gate.
+Result:
 
-**What doesn't, and the fix for the real generator:**
+- **SSC vs SFL:** a continuous diagonal band from monocytes to macrophages to HF-BF, as in S4.
+- **FSC vs FSCW:** the real diagonal shape, with aggregates along FSC = 255.
+- **SFL vs FSC:** a monocyte column at FSC ~50 and a macrophage cloud along the diagonal, as in S4.
+- **Differs from S4 by design:** more lymphocytes and macrophages and fewer monocytes (literature
+  composition); tighter lymphocytes (anchored on S1 and S2, not S4's weak stain); less debris (8%).
 
-1. **Real populations form a continuous diagonal band on SSC vs SFL; the synthetic ones are separate
-   blobs.** Fix: draw each population with its gate covariance, not independent channels.
-2. **The macrophage population is a vertical stripe** at SSC 167. Its SSC SD (8) is too narrow, and
-   in real data it runs along the diagonal. This is the same fix as 1.
-3. **FSC and FSCW are correlated in real data** (diagonal in the Rule 1 view); the synthetic data
-   is a wide column. This is the same fix as 1.
-4. **HF-BF and macrophage FSC SDs are too wide.** Synthetic events spread across FSC 10–250, while S4
-   keeps most HF-BF cells at FSC 40–100. Fix: narrow the SDs, or use a skewed distribution.
-
-`R/wdf_populations.R` already fits per-cluster covariance, so fixes 1–3 can reuse it.
+Remaining known simplifications: debris SFL uses a fixed zero-inflated tail, and the eosinophil
+position is assumed.
 
 ## 8. Decisions
 
+- **Healthy control = non-malignant pleural effusion** (2026-10-24).
 - **S4 low-FSC cluster** (SSC ~113, SFL ~29, FSC ~40): **dropped** from the healthy baseline
-  (decision 2026-10-24). It's treated as degenerate cells or debris and not modelled.
+  (2026-10-24). It's treated as degenerate cells or debris.
+- **Monocyte and macrophage split by FSC 80** (revision 2, 2026-10-24).
+- **Composition revised to the literature** (revision 2, 2026-10-24).
 
 ## 9. Open questions for review
 
-1. **The white-cell split (6b):** check against a benign-effusion reference and choose between the
-   benign-effusion and truly-normal profiles.
-2. **Eosinophil position:** assumed. Is S4's neutrophil gate at SSC 178 actually eosinophils?
+1. **Composition:** is a 40% lymphocyte / 43% monocyte-and-macrophage default right for the cohort
+   we're mimicking? For truly normal fluid, use Noppen (about 75% macrophage-lineage).
+2. **Eosinophil position:** assumed at S4's high-SSC end of the neutrophil gate.
 3. **HF-BF macrophage vs mesothelial:** they share one WDF region; the 2:1 split is arbitrary.
-4. **Monocyte vs macrophage boundary:** the monocyte gate takes in some macrophages, so the
-   monocyte SFL SD (30) is probably too wide.
 
 ## Files
 
 | File | What |
 |---|---|
 | `R/compare_s1_s4.R` | S1 vs S4 figure (step 2) |
-| `R/estimate_reference_populations.R` | HF-BF calibration and gate statistics (steps 3–4) |
+| `R/estimate_reference_populations.R` | HF-BF calibration, gate shares, shapes and correlations (steps 3–4) |
 | `R/plot_reference_populations.R` | overlay of the config on S4/S1 (step 5) |
 | `R/simulate_healthy_test.R` | one synthetic healthy file vs S4 (step 7) |
 | `config/healthy_pe_populations.csv` | the population table (steps 5–6) |
-| `outputs/reference_populations/` | calibration CSV, gate summary CSV, overlay PNG |
+| `outputs/reference_populations/` | calibration, gate summary and gate shape CSVs; overlay and synthetic-test PNGs |

@@ -57,8 +57,11 @@ gate_events <- function(d) {
     aggregate    = d$FSC >= 255 | d$FSCW >= 60,
     hfbf_band    = d$SFL >= HF_SFL,
     lymphocyte   = d$SSC < 95 & d$SFL < 80,
-    neutrophil   = d$SSC >= 140 & d$SFL < 50,
-    monocyte     = d$SSC >= 80 & d$SSC < 160 & d$SFL >= 50
+    # FSC >= 60 keeps out S4's small low-SFL cluster (FSC ~40), dropped as degenerate cells / debris.
+    neutrophil   = d$SSC >= 140 & d$SFL < 50 & d$FSC >= 60,
+    # The SFL 50–214 diagonal band, split by size: monocytes small, macrophages large.
+    monocyte     = d$SSC >= 80 & d$SFL >= 50 & d$FSC < 80,
+    macrophage   = d$SSC >= 80 & d$SFL >= 50 & d$FSC >= 80
   )
   for (nm in rev(names(rules))) g[rules[[nm]]] <- nm  # reverse so the first rule wins
   factor(g, levels = c(names(rules), "unassigned"))
@@ -81,6 +84,29 @@ summ <- do.call(rbind, lapply(names(ev), function(s) {
   }))
 }))
 write.csv(summ, file.path(out_dir, "gate_summary.csv"), row.names = FALSE)
+
+# ---- Step 3: robust spread and correlation per gate ----
+# SD = (P84 - P16) / 2 (equals the SD for a normal, resists outliers); correlation from Spearman's
+# rho converted to Pearson (r = 2 sin(pi rho / 6)). Saturated channels (all 255) get r = 0.
+shape <- do.call(rbind, lapply(names(ev), function(s) {
+  d <- ev[[s]]
+  g <- gate_events(d)
+  do.call(rbind, lapply(setdiff(levels(g), "unassigned"), function(lv) {
+    x <- d[g == lv, SIGNALS, drop = FALSE]
+    if (nrow(x) < 30) return(NULL)
+    sdv <- sapply(x, function(v) diff(quantile(v, c(0.16, 0.84), names = FALSE)) / 2)
+    rho <- suppressWarnings(cor(x, method = "spearman"))
+    rho[is.na(rho)] <- 0
+    r <- 2 * sin(pi * rho / 6)
+    pairs <- t(combn(SIGNALS, 2))
+    data.frame(label = s, gate = lv, n = nrow(x),
+               t(setNames(round(sapply(x, median), 1), paste0(SIGNALS, "_centre"))),
+               t(setNames(round(sdv, 1), paste0(SIGNALS, "_sd"))),
+               t(setNames(round(r[pairs], 2), paste0("r_", pairs[, 1], "_", pairs[, 2]))))
+  }))
+}))
+write.csv(shape, file.path(out_dir, "gate_shape.csv"), row.names = FALSE)
+print(shape, row.names = FALSE)
 print(summ[, c("label", "gate", "n", "pct_all", "pct_cells", "SSC_med", "SFL_med", "FSC_med", "FSCW_med")],
       row.names = FALSE)
 cat("Wrote", out_dir, "\n")

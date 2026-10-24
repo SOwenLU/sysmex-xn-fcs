@@ -1,7 +1,7 @@
 # One synthetic healthy pleural-effusion file from config/healthy_pe_populations.csv, plotted
 # next to S4 on the same views as compare_S1_S4.png. A visual sanity check of the suggested values,
-# not the generator: channels are drawn independently (no within-population correlation) and there
-# is no sample-to-sample variation.
+# not the generator: each population is one multivariate normal (centres, SDs, correlations from the
+# config) and there is no sample-to-sample variation.
 #
 #   Rscript R/simulate_healthy_test.R [events_dir] [out_png] [n_events] [seed]
 # Defaults: <project>/outputs/events, <project>/outputs/reference_populations/synthetic_test.png,
@@ -30,9 +30,19 @@ n_deb <- round(n_events * DEBRIS_PCT / 100)
 n_cell <- as.vector(rmultinom(1, n_events - n_deb, cells$pct_cells / sum(cells$pct_cells)))
 
 clip <- function(x) pmin(pmax(round(x), 0), 255)
+# Multivariate normal per population from the config's centres, SDs and pairwise correlations.
 draw <- function(p, n) {
-  d <- sapply(SIGNALS, function(s) clip(rnorm(n, p[[paste0(s, "_centre")]], p[[paste0(s, "_sd")]])))
-  d <- as.data.frame(matrix(d, nrow = n, dimnames = list(NULL, SIGNALS)))
+  R <- diag(4)
+  dimnames(R) <- list(SIGNALS, SIGNALS)
+  for (pr in combn(SIGNALS, 2, simplify = FALSE)) R[pr[1], pr[2]] <- R[pr[2], pr[1]] <- p[[paste0("r_", pr[1], "_", pr[2])]]
+  sdv <- unlist(p[paste0(SIGNALS, "_sd")])
+  S <- diag(sdv) %*% R %*% diag(sdv)
+  ev <- eigen(S, symmetric = TRUE)  # nudge to positive semi-definite if the pairwise rs disagree
+  S <- ev$vectors %*% diag(pmax(ev$values, 0)) %*% t(ev$vectors)
+  z <- matrix(rnorm(n * 4), n) %*% t(ev$vectors %*% diag(sqrt(pmax(ev$values, 0))))
+  d <- sweep(z, 2, unlist(p[paste0(SIGNALS, "_centre")]), "+")
+  d <- as.data.frame(apply(d, 2, clip))
+  names(d) <- SIGNALS
   d$FSC <- pmax(d$FSC, 10)  # instrument FSC floor seen in S1–S4
   d$population <- rep(p$population, n)
   d

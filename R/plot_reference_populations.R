@@ -29,9 +29,15 @@ SEQ <- c("#e6e5e1", "#b7d3f6", "#86b6ef", "#3987e5", "#1c5cab")
 ASSUMED <- "#eb6834"
 BIN <- 4
 
-ellipse <- function(cx, sx, cy, sy, k = 2) {
-  t <- seq(0, 2 * pi, length.out = 60)
-  data.frame(x = pmin(pmax(cx + k * sx * cos(t), 0), 255), y = pmin(pmax(cy + k * sy * sin(t), 0), 255))
+# Centre ± k SD ellipse of a bivariate normal with correlation r.
+ellipse <- function(cx, sx, cy, sy, r = 0, k = 2) {
+  t <- seq(0, 2 * pi, length.out = 80)
+  data.frame(x = pmin(pmax(cx + k * sx * cos(t), 0), 255),
+             y = pmin(pmax(cy + k * sy * (r * cos(t) + sqrt(1 - r^2) * sin(t)), 0), 255))
+}
+pair_r <- function(p, a, b) {
+  nm <- intersect(c(paste0("r_", a, "_", b), paste0("r_", b, "_", a)), names(p))
+  if (length(nm)) p[[nm[1]]] else 0
 }
 
 view <- function(xv, yv, title) {
@@ -40,7 +46,8 @@ view <- function(xv, yv, title) {
   b$pct <- 100 * b$n / as.numeric(table(ev$file)[as.character(b$file)])
   el <- do.call(rbind, lapply(seq_len(nrow(pops)), function(i) {
     p <- pops[i, ]
-    e <- ellipse(p[[paste0(xv, "_centre")]], p[[paste0(xv, "_sd")]], p[[paste0(yv, "_centre")]], p[[paste0(yv, "_sd")]])
+    e <- ellipse(p[[paste0(xv, "_centre")]], p[[paste0(xv, "_sd")]], p[[paste0(yv, "_centre")]], p[[paste0(yv, "_sd")]],
+                 pair_r(p, xv, yv))
     e$population <- p$population
     e$assumed <- grepl("positions ASSUMED", p$status)
     e
@@ -54,6 +61,10 @@ view <- function(xv, yv, title) {
   # Labels near the top or right edge go below / left of their point so they stay on the plot.
   cen$lx <- pmin(cen$x, 200)
   cen$vj <- ifelse(cen$y >= 240, 1.6, -0.6)
+  # Neighbours that would collide: one of each pair goes below its point (aggregate a line lower).
+  below <- cen$population %in% c("eosinophil", "monocyte")
+  cen$vj[below] <- 1.6
+  cen$vj[cen$population == "aggregate"] <- 3.2
   ggplot() +
     geom_tile(data = b, aes(x, y, fill = pct), width = BIN, height = BIN) +
     geom_path(data = el, aes(x, y, group = population, colour = assumed, linetype = assumed), linewidth = 0.6) +
