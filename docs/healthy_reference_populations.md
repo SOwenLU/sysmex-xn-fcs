@@ -183,15 +183,41 @@ with HF-BF fixed by 6a.
 quoted from memory and must be checked against the paper before use. If that profile is preferred,
 move most of the lymphocyte share into monocyte/macrophage.
 
-## 7. Open questions for review
+## 7. Synthetic test (one file)
 
-1. **The S4 low-FSC cluster** (SSC ~113, SFL ~29, FSC ~40): degenerate cells or debris (current
-   treatment: excluded), or something to model?
-2. **The white-cell split (6b):** check against a benign-effusion reference and choose between the
+`Rscript R/simulate_healthy_test.R` → `outputs/reference_populations/synthetic_test.png`.
+This draws 12,000 events (seed 1) from the config, with 8% debris, and plots them beside S4.
+The test is deliberately crude: each channel is drawn independently and there is no sample-to-sample
+variation.
+
+**What matches S4:** the lymphocyte, neutrophil, monocyte and debris positions; the SFL = 255 HF-BF
+ceiling; a small FSC = 255 aggregate edge.
+
+**What doesn't, and the fix for the real generator:**
+
+1. **Real populations form a continuous diagonal band on SSC vs SFL; the synthetic ones are separate
+   blobs.** Fix: draw each population with its gate covariance, not independent channels.
+2. **The macrophage population is a vertical stripe** at SSC 167. Its SSC SD (8) is too narrow, and
+   in real data it runs along the diagonal. This is the same fix as 1.
+3. **FSC and FSCW are correlated in real data** (diagonal in the Rule 1 view); the synthetic data
+   is a wide column. This is the same fix as 1.
+4. **HF-BF and macrophage FSC SDs are too wide.** Synthetic events spread across FSC 10–250, while S4
+   keeps most HF-BF cells at FSC 40–100. Fix: narrow the SDs, or use a skewed distribution.
+
+`R/wdf_populations.R` already fits per-cluster covariance, so fixes 1–3 can reuse it.
+
+## 8. Decisions
+
+- **S4 low-FSC cluster** (SSC ~113, SFL ~29, FSC ~40): **dropped** from the healthy baseline
+  (decision 2026-10-24). It's treated as degenerate cells or debris and not modelled.
+
+## 9. Open questions for review
+
+1. **The white-cell split (6b):** check against a benign-effusion reference and choose between the
    benign-effusion and truly-normal profiles.
-3. **Eosinophil position:** assumed. Is S4's neutrophil gate at SSC 178 actually eosinophils?
-4. **HF-BF macrophage vs mesothelial:** they share one WDF region; the 2:1 split is arbitrary.
-5. **Monocyte vs macrophage boundary:** the monocyte gate takes in some macrophages, so the
+2. **Eosinophil position:** assumed. Is S4's neutrophil gate at SSC 178 actually eosinophils?
+3. **HF-BF macrophage vs mesothelial:** they share one WDF region; the 2:1 split is arbitrary.
+4. **Monocyte vs macrophage boundary:** the monocyte gate takes in some macrophages, so the
    monocyte SFL SD (30) is probably too wide.
 
 ## Files
@@ -201,5 +227,6 @@ move most of the lymphocyte share into monocyte/macrophage.
 | `R/compare_s1_s4.R` | S1 vs S4 figure (step 2) |
 | `R/estimate_reference_populations.R` | HF-BF calibration and gate statistics (steps 3–4) |
 | `R/plot_reference_populations.R` | overlay of the config on S4/S1 (step 5) |
+| `R/simulate_healthy_test.R` | one synthetic healthy file vs S4 (step 7) |
 | `config/healthy_pe_populations.csv` | the population table (steps 5–6) |
 | `outputs/reference_populations/` | calibration CSV, gate summary CSV, overlay PNG |
